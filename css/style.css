@@ -1,0 +1,227 @@
+/*
+ * 遷移元（軽いページ）のスタイル
+ * 本家（阿部寛のホームページ）のレイアウトを、table / font を使わずに再現する
+ */
+
+:root {
+  --menu-width: 18%;
+  --menu-bg: #f0f0ff;
+  --frame-border: #d4d4d4;
+  --frame-border-dark: #a0a0a0;
+  --text: #000;
+  --accent: #ff0000;
+  --line: #999;
+
+  --photo-width: 350px;
+  --column-gap: 16px;
+  /* 本家の空白セル（width=14 / width=70）に相当するインデント */
+  --profile-indent: 24px;
+  --item-indent: 72px;
+  --line-height: 24px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+  font-size: 16px;
+  line-height: var(--line-height);
+}
+
+h1,
+h2,
+h3,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------- 左メニュー（本家の frameset 左側） ---------- */
+
+.menu {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--menu-width);
+  padding: 56px 0 0 22px;
+  overflow-y: auto;
+  background: var(--menu-bg);
+  /* frameset の境界線 */
+  border-right: 5px solid var(--frame-border);
+  box-shadow: 1px 0 0 var(--frame-border-dark);
+}
+
+.menu ul {
+  display: grid;
+  gap: 32px;
+  list-style: none;
+}
+
+.menu li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.menu li::before {
+  content: "";
+  flex-shrink: 0;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--dot);
+}
+
+/* ●の色は本家と同じ */
+.menu-top {
+  --dot: #ffcccc;
+}
+.menu-movie {
+  --dot: #00ff00;
+}
+.menu-tv {
+  --dot: #33ffff;
+}
+.menu-stage {
+  --dot: #0099ff;
+}
+.menu-photo {
+  --dot: #0000ff;
+}
+.menu-essay {
+  --dot: #333399;
+}
+.menu-kanri {
+  --dot: #cc00cc;
+}
+.menu-english {
+  --dot: #ff0000;
+}
+
+/* ---------- メイン ---------- */
+
+.main {
+  min-height: 100vh;
+  margin-left: var(--menu-width);
+  padding: 40px 0 120px;
+  background: url(../images/bg.jpg);
+}
+
+.site-title {
+  font-size: 32px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/*
+ * 左：写真とプロフィール / 右：最新情報
+ * 写真の上端は、右カラム最初の区切り線にそろえる
+ */
+.layout {
+  display: grid;
+  grid-template-columns: var(--photo-width) 1fr;
+  grid-template-areas:
+    ".       news-title"
+    "profile news";
+  column-gap: var(--column-gap);
+  margin-top: 40px;
+  padding-left: 2px;
+}
+
+/* ---------- プロフィール ---------- */
+
+.profile {
+  grid-area: profile;
+}
+
+.profile-photo {
+  display: block;
+  width: var(--photo-width);
+  height: auto;
+  margin-bottom: 40px;
+}
+
+.profile-list,
+.office {
+  padding-left: var(--profile-indent);
+}
+
+.profile-list {
+  display: grid;
+  gap: 4px;
+  list-style: none;
+}
+
+.office {
+  margin-top: 48px;
+}
+
+/* ---------- 最新情報 ---------- */
+
+.news-title {
+  grid-area: news-title;
+  padding-bottom: 40px;
+  font-size: 16px;
+  font-weight: normal;
+  text-align: center;
+}
+
+.news {
+  grid-area: news;
+  margin-left: 16px;
+}
+
+.news-section {
+  padding: 16px 0 48px;
+  border-top: 1px solid var(--line);
+}
+
+.news-category {
+  margin-bottom: 4px;
+  font-size: 16px;
+}
+
+.news-list {
+  display: grid;
+  gap: var(--line-height);
+  padding-left: var(--item-indent);
+  list-style: none;
+  font-weight: bold;
+  /* 行頭の「の空き（全角の左半分）を詰めて、日付と左端をそろえる */
+  text-spacing-trim: trim-start;
+}
+
+.new-badge {
+  color: var(--accent);
+  font-weight: normal;
+}
+
+.notice {
+  padding-top: 48px;
+  border-top: 1px solid var(--line);
+  font-weight: bold;
+}
+
+.notice-alert {
+  margin-top: var(--line-height);
+  color: var(--accent);
+}
+
+/* ---------- 狭い画面 ---------- */
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "profile"
+      "news-title"
+      "news";
+    row-gap: 40px;
+  }
+}
