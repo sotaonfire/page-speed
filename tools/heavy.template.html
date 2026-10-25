@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>大当たり！ | Sota Onfireのホームページ</title>
+    <!-- どれも描画をブロックする。heavy-bundle.js は数十MBあり、heavy.js は数億回の抽選を計算する -->
+    <link rel="stylesheet" href="heavy/heavy.css" />
+    <script src="heavy/heavy-bundle.js"></script>
+    <script src="heavy/heavy.js"></script>
+  </head>
+  <body>
+    <!-- HEAVY_HTML_PAYLOAD -->
+
+    <!-- 背景：回転する光線と、降ってくる紙吹雪（紙吹雪は heavy.js で生成） -->
+    <div class="rays" aria-hidden="true"></div>
+    <div class="confetti" aria-hidden="true"></div>
+
+    <main class="stage">
+      <p class="sevens" aria-label="777">
+        <span class="seven">7</span><span class="seven">7</span><span class="seven">7</span>
+      </p>
+
+      <div class="hero">
+        <img class="hero-photo" src="../images/profile.jpg" width="350" height="414" alt="Sota Onfire" />
+        <h1 class="jackpot" aria-label="大当たり!!">
+          <span>大</span><span>当</span><span>た</span><span>り</span><span>!!</span>
+        </h1>
+      </div>
+
+      <p class="rush">SOTA ONFIRE RUSH 突入</p>
+
+      <div class="round">
+        <p class="round-count">ROUND <strong>1</strong> / 16</p>
+        <p class="right-shot">右打ち <span aria-hidden="true">→</span></p>
+      </div>
+
+      <!-- heavy.js が実際に計算した抽選の結果 -->
+      <p class="lottery">
+        抽選 <span class="lottery-draws">-</span> 回 / 大当たり <span class="lottery-hits">-</span> 回
+      </p>
+    </main>
+
+    <!-- 着地した瞬間に画面を白く光らせる -->
+    <div class="flash" aria-hidden="true"></div>
+
+    <audio class="jackpot-sound" src="../images/ポキューン！先バレ風激熱通知音.mp3" preload="auto"></audio>
+  </body>
+</html>

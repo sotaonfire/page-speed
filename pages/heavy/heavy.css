@@ -1,0 +1,364 @@
+/*
+ * 遷移先（重いページ）のスタイル
+ * パチンコの大当たり画面風。演出は body.is-active が付いた瞬間（＝画面に表示された瞬間）に始まる
+ */
+
+:root {
+  --red: #ff1a1a;
+  --gold: #ffd700;
+  --gold-light: #fff6b0;
+  --gold-dark: #c47a00;
+  --yellow: #ffee00;
+  --rainbow: #ff0040, #ff8a00, #ffe600, #3dff00, #00e5ff, #2f5bff, #c400ff, #ff0040;
+  --font: "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow: hidden;
+  color: #fff;
+  font-family: var(--font);
+  background: radial-gradient(circle at 50% 45%, #ff3d00 0%, #b00000 35%, #2a0000 70%, #000 100%);
+}
+
+p,
+h1 {
+  margin: 0;
+}
+
+/* ---------- 背景 ---------- */
+
+/* 中心から放射状に回転する金色の光線 */
+.rays {
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  width: 250vmax;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  background: repeating-conic-gradient(rgba(255, 215, 0, 0.35) 0deg 8deg, transparent 8deg 16deg);
+  mask: radial-gradient(circle, #000 10%, transparent 60%);
+  animation: spin 12s linear infinite;
+}
+
+/* 紙吹雪（heavy.js で span を生成し、--x / --delay などをランダムに渡す） */
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.confetti span {
+  position: absolute;
+  top: -5vh;
+  left: var(--x);
+  width: var(--size);
+  height: calc(var(--size) * 0.5);
+  background: var(--color);
+  opacity: 0;
+}
+
+.is-active .confetti span {
+  animation: fall var(--duration) linear var(--delay) infinite;
+}
+
+/* ---------- メイン ---------- */
+
+.stage {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 16px;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.is-active .stage {
+  animation: shake 0.5s 0.9s;
+}
+
+/* 777：リールが回ってから左・中・右の順に止まる */
+.sevens {
+  display: flex;
+  gap: 16px;
+}
+
+.seven {
+  display: grid;
+  place-items: center;
+  width: clamp(64px, 9vw, 112px);
+  aspect-ratio: 3 / 4;
+  border: 4px solid var(--gold);
+  border-radius: 12px;
+  background: linear-gradient(#fff, #ffe9e9);
+  box-shadow:
+    0 0 16px var(--gold),
+    inset 0 0 12px rgba(0, 0, 0, 0.3);
+  color: var(--red);
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 900;
+  font-style: italic;
+  -webkit-text-stroke: 2px #600;
+}
+
+.is-active .seven {
+  animation: reel 0.12s linear 6;
+}
+
+.is-active .seven:nth-child(2) {
+  animation-iteration-count: 9;
+}
+
+.is-active .seven:nth-child(3) {
+  animation-iteration-count: 12;
+}
+
+/* 写真の上に「大当たり!!」を重ねる */
+.hero {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.hero-photo {
+  width: clamp(200px, 26vw, 320px);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 50%;
+  /* 虹色に回るリング */
+  border: 8px solid transparent;
+  background:
+    linear-gradient(#000, #000) padding-box,
+    conic-gradient(from var(--ring-angle), var(--rainbow)) border-box;
+  box-shadow: 0 0 40px 8px rgba(255, 215, 0, 0.8);
+}
+
+/* 写真の色は変えずに、リングの虹だけを回す */
+@property --ring-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.is-active .hero-photo {
+  animation: ring-spin 1.5s linear infinite;
+}
+
+/* 金色の「大当たり!!」が1文字ずつ叩きつけられる */
+.jackpot {
+  position: absolute;
+  bottom: -8%;
+  display: flex;
+  font-size: clamp(64px, 12vw, 160px);
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.jackpot span {
+  background: linear-gradient(var(--gold-light) 0%, var(--gold) 40%, var(--gold-dark) 60%, var(--gold-light) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 3px #5a0000;
+  filter: drop-shadow(0 0 16px var(--yellow)) drop-shadow(4px 6px 0 #000);
+  opacity: 0;
+  --i: 0;
+}
+
+/* 1文字ずつ少し遅らせる */
+.jackpot span:nth-child(2) { --i: 1; }
+.jackpot span:nth-child(3) { --i: 2; }
+.jackpot span:nth-child(4) { --i: 3; }
+.jackpot span:nth-child(5) { --i: 4; }
+
+.is-active .jackpot span {
+  animation:
+    slam 0.35s cubic-bezier(0.2, 1.6, 0.4, 1) calc(0.6s + var(--i) * 0.08s) forwards,
+    glow 0.6s ease-in-out calc(1.2s + var(--i) * 0.08s) infinite alternate;
+}
+
+.rush {
+  /* 「大当たり!!」は写真の下にはみ出しているので、その分あける */
+  margin-top: 32px;
+  padding: 4px 24px;
+  border: 3px solid var(--gold);
+  background: linear-gradient(90deg, #6a00ff, #ff007a);
+  font-size: clamp(20px, 3vw, 32px);
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  text-shadow: 2px 2px 0 #000;
+  opacity: 0;
+}
+
+.is-active .rush {
+  animation: pop 0.4s ease-out 1.3s forwards;
+}
+
+.round {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-weight: 900;
+}
+
+.round-count {
+  font-size: 24px;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.round-count strong {
+  color: var(--yellow);
+  font-size: 40px;
+}
+
+.right-shot {
+  padding: 4px 16px;
+  border-radius: 8px;
+  background: var(--yellow);
+  color: var(--red);
+  font-size: 28px;
+}
+
+.is-active .right-shot {
+  animation: blink 0.5s steps(1) infinite;
+}
+
+.lottery {
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 1px 1px 0 #000;
+}
+
+/* 着地の瞬間の白い閃光（3回点滅） */
+.flash {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.is-active .flash {
+  animation: flash 0.3s ease-out 3;
+}
+
+/* ---------- アニメーション ---------- */
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes ring-spin {
+  to {
+    --ring-angle: 360deg;
+  }
+}
+
+@keyframes fall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(110vh) rotate(var(--spin));
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  20% {
+    translate: -12px 8px;
+  }
+  40% {
+    translate: 10px -10px;
+  }
+  60% {
+    translate: -8px 6px;
+  }
+  80% {
+    translate: 6px -4px;
+  }
+}
+
+@keyframes reel {
+  from {
+    transform: translateY(-30%);
+    filter: blur(4px);
+  }
+  to {
+    transform: translateY(30%);
+    filter: blur(4px);
+  }
+}
+
+@keyframes slam {
+  from {
+    opacity: 0;
+    transform: scale(4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow {
+  to {
+    filter: drop-shadow(0 0 32px #fff) drop-shadow(4px 6px 0 #000) brightness(1.3);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes flash {
+  from {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rays,
+  .is-active *,
+  .is-active .stage {
+    animation: none !important;
+  }
+
+  .jackpot span,
+  .rush {
+    opacity: 1;
+  }
+}

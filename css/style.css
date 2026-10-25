@@ -213,6 +213,67 @@ ul {
   color: var(--accent);
 }
 
+/* ---------- PUSHボタン（パチンコの演出風） ---------- */
+
+.push-section {
+  display: grid;
+  justify-items: center;
+  /* 虹色の光が上の区切り線で切れないよう、上下の余白をそろえる */
+  padding-top: 48px;
+}
+
+.push-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  /* 虹色の光をボタンの後ろに重ねる */
+  isolation: isolate;
+  animation: push-beat 1.2s linear infinite;
+}
+
+/* ボタンの周りで色が変わり続ける虹色の光 */
+.push-glow {
+  position: absolute;
+  z-index: -1;
+  inset: -12px;
+  border-radius: 48px;
+  background: conic-gradient(#ff0000, #ffea00, #00ff00, #00e5ff, #0055ff, #ff00ff, #ff0000);
+  filter: blur(16px);
+  animation: push-rainbow 1.5s linear infinite;
+}
+
+.push-image {
+  display: block;
+  width: 250px;
+  height: auto;
+}
+
+/* 押した瞬間にボタンが沈んで光る */
+.push-button:active .push-image {
+  transform: translateY(6px) scale(0.92);
+  filter: brightness(1.4);
+}
+
+/* 一定の速さで拡大・縮小をくり返す */
+@keyframes push-beat {
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes push-rainbow {
+  to {
+    filter: blur(16px) hue-rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .push-button,
+  .push-glow {
+    animation: none;
+  }
+}
+
 /* ---------- 狭い画面 ---------- */
 
 @media (max-width: 960px) {
