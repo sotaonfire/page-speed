@@ -65,11 +65,15 @@ function createConfetti() {
   }
 }
 
+// 効果音の音量（0〜1。1 が元の音量）
+const SOUND_VOLUME = 0.3;
+
 // 演出（アニメーション＋効果音）を始める
 function startJackpot() {
   document.body.classList.add("is-active");
 
   const sound = document.querySelector(".jackpot-sound");
+  sound.volume = SOUND_VOLUME;
   sound.play().catch(() => {
     // 自動再生がブロックされたときは、最初のクリックかキー入力で鳴らす
     const playOnce = () => sound.play();

@@ -283,6 +283,7 @@ ul {
 
 /* ---------- 狭い画面 ---------- */
 
+/* タブレット：2カラムを縦に並べる */
 @media (max-width: 960px) {
   .layout {
     grid-template-columns: 1fr;
@@ -291,5 +292,50 @@ ul {
       "news-title"
       "news";
     row-gap: 40px;
+    padding: 0 16px;
+  }
+
+  .profile-photo {
+    max-width: 100%;
+  }
+
+  .news {
+    margin-left: 0;
+  }
+}
+
+/* スマホ：左メニューを上部の横並びメニューにする */
+@media (max-width: 640px) {
+  .menu {
+    position: static;
+    width: auto;
+    padding: 16px;
+    border-right: none;
+    border-bottom: 5px solid var(--frame-border);
+    box-shadow: 0 1px 0 var(--frame-border-dark);
+  }
+
+  .menu ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+  }
+
+  .main {
+    margin-left: 0;
+    padding-top: 24px;
+  }
+
+  .site-title {
+    padding: 0 16px;
+    font-size: 24px;
+  }
+
+  .layout {
+    margin-top: 24px;
+  }
+
+  .news-list {
+    padding-left: var(--profile-indent);
   }
 }

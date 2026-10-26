@@ -20,7 +20,8 @@
 body {
   margin: 0;
   min-height: 100vh;
-  overflow: hidden;
+  /* 横は光線や紙吹雪がはみ出すので隠す。縦は小さい画面でスクロールできるようにする */
+  overflow-x: hidden;
   color: #fff;
   font-family: var(--font);
   background: radial-gradient(circle at 50% 45%, #ff3d00 0%, #b00000 35%, #2a0000 70%, #000 100%);
@@ -72,6 +73,8 @@ h1 {
 .stage {
   position: relative;
   display: grid;
+  /* 列が中身の幅で画面より広がらないよう、画面幅までに抑える */
+  grid-template-columns: minmax(0, 1fr);
   justify-items: center;
   align-content: center;
   gap: 16px;
@@ -157,7 +160,7 @@ h1 {
   position: absolute;
   bottom: -8%;
   display: flex;
-  font-size: clamp(64px, 12vw, 160px);
+  font-size: clamp(48px, 13vw, 160px);
   font-weight: 900;
   line-height: 1;
   white-space: nowrap;
@@ -192,10 +195,12 @@ h1 {
   padding: 4px 24px;
   border: 3px solid var(--gold);
   background: linear-gradient(90deg, #6a00ff, #ff007a);
-  font-size: clamp(20px, 3vw, 32px);
+  /* スマホでも1行に収まるよう、画面幅に合わせて小さくする */
+  font-size: clamp(16px, 4.5vw, 32px);
   font-weight: 900;
   font-style: italic;
   letter-spacing: 0.08em;
+  white-space: nowrap;
   text-shadow: 2px 2px 0 #000;
   opacity: 0;
 }
@@ -206,8 +211,10 @@ h1 {
 
 .round {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
-  gap: 24px;
+  gap: 8px 24px;
   font-weight: 900;
 }
 
