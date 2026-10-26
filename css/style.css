@@ -82,6 +82,13 @@ ul {
 .menu-top {
   --dot: #ffcccc;
 }
+/* デモ用に追加した遷移元ページ */
+.menu-prefetch {
+  --dot: #ff9900;
+}
+.menu-prerender {
+  --dot: #ffd700;
+}
 .menu-movie {
   --dot: #00ff00;
 }
