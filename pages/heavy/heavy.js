@@ -66,7 +66,7 @@ function createConfetti() {
 }
 
 // 効果音の音量（0〜1。1 が元の音量）
-const SOUND_VOLUME = 0.3;
+const SOUND_VOLUME = 0.8;
 
 // 演出（アニメーション＋効果音）を始める
 function startJackpot() {
